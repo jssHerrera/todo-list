@@ -56,7 +56,15 @@ export const putTareaController = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    
+      // Si es el error "Tarea no encontrada" del modelo
+    if (error.message === 'Tarea no encontrada') {
+      return res.status(404).json({ 
+        message: 'Tarea no encontrada',
+        error: `No existe una tarea con el ID ${req.params.id}` 
+      });
+    }
+
     res.status(500).json({ 
       message: "Error al actualizar tarea",
       error: error.message 
@@ -67,22 +75,35 @@ export const putTareaController = async (req, res) => {
 // Controller - Extrae el id antes de pasarlo
 export const deleteTareaController = async (req, res) => {
   try {
-    const { id } = req.params; // 👈 Extrae el id aquí
-    const tareaEliminada = await deleteTareaModels(id); // 👈 Pasa solo el id
-    
-    console.log(tareaEliminada);
+    const { id } = req.params;
+    const tareaEliminada = await deleteTareaModels(id);
     
     await pool.query(
-      `
-      INSERT INTO logs (descripcion, usuarioregistra)
-      VALUES ($1, $2)
-      `,
+      `INSERT INTO logs (descripcion, usuarioregistra)
+       VALUES ($1, $2)`,
       [`Tarea eliminada con ID ${tareaEliminada.id}`, tareaEliminada.usuarioregistra]
     );
 
-    res.json({ message: 'Se eliminó la tarea correctamente' });
+    res.json({ 
+      message: 'Tarea eliminada correctamente',
+      data: tareaEliminada 
+    });
+    
   } catch (error) {
-    console.error(error); // 👈 Agrega esto para ver el error real
-    res.status(500).json({ message: "Error al eliminar tarea", error: error.message });
+
+    
+    // Si es el error "Tarea no encontrada" del modelo
+    if (error.message === 'Tarea no encontrada') {
+      return res.status(404).json({ 
+        message: 'Tarea no encontrada',
+        error: `No existe una tarea con el ID ${req.params.id}` 
+      });
+    }
+    
+    // Otros errores (DB, etc)
+    res.status(500).json({ 
+      message: "Error al eliminar tarea",
+      error: error.message 
+    });
   }
 }

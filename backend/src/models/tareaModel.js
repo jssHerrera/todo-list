@@ -7,7 +7,7 @@ export const getTareasModels = async () => {
 }
 
 // Crear tarea
-export const postTareaModels = async ({descripcion, estado, usuarioregistra}) => {
+export const postTareaModels = async ({descripcion, estado=false, usuarioregistra = 1}) => {
   const query = `
   INSERT INTO tareas (descripcion, estado, usuarioRegistra)
   VALUES ($1, $2, $3)
@@ -43,7 +43,7 @@ export const putTareaModels = async (id, campos) => {
 
   const result = await pool.query(query, [...values, id]);
   
-  // Opcional: manejar si no se encontró el registro
+  // si no se encontró el registro
   if (result.rows.length === 0) {
     throw new Error('Tarea no encontrada');
   }
