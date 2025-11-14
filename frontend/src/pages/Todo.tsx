@@ -9,7 +9,7 @@ import {
   crearTarea,
   actualizarTarea,
   eliminarTarea,
-} from "../services/TodoService";
+} from "../services/todoService";
 
 interface Tarea {
   id: number;
