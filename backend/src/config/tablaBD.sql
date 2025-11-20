@@ -31,3 +31,6 @@ ALTER TABLE tareas
 
 ALTER TABLE logs
   ADD FOREIGN KEY (usuarioregistra) REFERENCES usuarios(id);
+
+
+INSERT INTO usuarios (nombre) VALUES ('admin');

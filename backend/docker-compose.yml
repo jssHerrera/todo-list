@@ -1,0 +1,45 @@
+services:
+  backend:
+    build: .
+    container_name: todoapp
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=myDB
+      - DB_USER=postgres
+      - DB_PASSWORD=123456
+      - DB_NAME=todolist
+      - DB_PORT=5432
+    depends_on:
+      - myDB
+    volumes:
+      - .:/app
+      -  node_modules:/app/node_modules 
+    networks:
+      - app-network
+
+  myDB:
+    image: postgres:17.4-bookworm
+    container_name: todoapp_bd
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=todolist
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/config/tablaBD.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  node_modules :
