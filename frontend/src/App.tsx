@@ -19,4 +19,3 @@ function App() {
 
 export default App;
 // comnetario 1
-// comnetario 10
