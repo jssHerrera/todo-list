@@ -14,5 +14,6 @@ function App() {
 }
 
 // console.log(|1);
+// console.log(|2);
 
 export default App;
